@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --Blue400: hsl(180, 66%, 49%);
+  --Purple950: hsl(257, 27%, 26%);
+  --Red400: hsl(0, 87%, 67%);
+  --Gray400: hsl(0, 0%, 75%);
+  --Gray500: hsl(257, 7%, 63%);
+  --Gray900: hsl(255, 11%, 22%);
+  --Gray950: hsl(260, 8%, 14%);
+}
+
+.layout {
+  @apply max-w-[1440px] mx-auto w-full;
+}
+
+
+.background {
+  background-image: url("../src/assets/bg-boost-desktop.svg");
+ object-fit: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+.backgroundDesktop {
+  background-image: url("../src/assets/bg-boost-desktop.svg");
+ object-fit: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.backgroundMobile {
+  background-image: url("../src/assets/bg-boost-mobile.svg");
+ object-fit: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
