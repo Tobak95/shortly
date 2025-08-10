@@ -103,7 +103,7 @@ const Statistics = () => {
           </form>
         </div>
         {shortUrls && (
-          <div className="mt-6 space-y-4">
+          <div className="mt-30   lg:mt-15 space-y-4">
             {shortUrls.map((link, index) => (
               <div
                 key={index}
