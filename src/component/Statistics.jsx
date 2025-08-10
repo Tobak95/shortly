@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import iconFully from "../assets/icon-fully-customizable.svg";
 import iconDetailed from "../assets/icon-detailed-records.svg";
 import iconBrand from "../assets/icon-brand-recognition.svg";
@@ -7,9 +7,9 @@ import iconBrand from "../assets/icon-brand-recognition.svg";
 const url = "https://tinyurl.com/api-create.php?url=";
 const Statistics = () => {
   const [inputValue, setInputValue] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
+  const [shortUrls, setShortUrls] = useState([]);
   const [error, setError] = useState("");
-  const [copy, setCopy] = useState("Copy");
+  const [copy, setCopy] = useState({});
 
   const isValidUrl = (urlString) => {
     const pattern = new RegExp(
@@ -18,30 +18,59 @@ const Statistics = () => {
     return pattern.test(urlString);
   };
 
+  // Function to handle form submission and fetch the shortened URL and the form validation
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (inputValue === "") {
       setError("Please add a link");
       return;
     } else if (!isValidUrl(inputValue)) {
-      setError("Please enter a valid URL (eg: https://Tobiloba.com)");
+      setError("Please enter a valid URL");
       return;
     } else {
       setError("");
     }
+
     try {
       const response = await fetch(`${url}${encodeURIComponent(inputValue)}`);
       const result = await response.text();
-      setShortUrl(result);
+      const newLink = { original: inputValue, shortened: result };
+      setShortUrls((prev) => {
+        const updated = [newLink, ...prev];
+        localStorage.setItem("shortUrls", JSON.stringify(updated));
+        return updated;
+      });
     } catch (error) {
-      setShortUrl("Error shortening link");
+      setError("Error shortening link");
       console.error("Error fetching shortened link:", error);
     }
   };
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shortUrl);
-    setCopy("Copied!");
+
+  // Function to handle copying the short URL to (clipboard copy & paste)
+
+  const handleCopy = (url, index, e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(url).then(() => {
+      setCopy((prev) => ({ ...prev, [index]: true }));
+      setTimeout(() => {
+        setCopy((prev) => ({ ...prev, [index]: false }));
+      }, 2000);
+    });
   };
+
+  useEffect(() => {
+    const stored = localStorage.getItem("shortUrls");
+    if (stored) setShortUrls(JSON.parse(stored));
+  }, []);
+
+  // useEffect(() => {
+  //   if (shortUrl) localStorage.setItem("shortUrl", JSON.stringify(shortUrl));
+  // }, [shortUrl]);
+
+  // const HandleNewLink = (original, shortened) => {
+  //   const NewLink = { original, shortened };
+  //   setShortUrl((prev) => [...prev, NewLink]);
+  // };
 
   return (
     <div className="bg-[var(--Gray400)]">
@@ -73,30 +102,38 @@ const Statistics = () => {
             </div>
           </form>
         </div>
-        {shortUrl && (
-          <div className=" mt-6 text-center bg-white p-4 rounded-lg lg:flex justify-between lg:px-10 cursor-pointer">
-            <span className="text-black text-[20px] lg:text-[24px]">
-              {inputValue}
-            </span>
-
-            <div className=" lg:flex justify-between gap-5 items-center">
-              <a
-                href={shortUrl}
-                rel="...."
-                className="text-[var(--Blue400)] text-[20px] lg:text-[18px] underline break-all "
+        {shortUrls && (
+          <div className="mt-6 space-y-4">
+            {shortUrls.map((link, index) => (
+              <div
+                key={index}
+                className="text-center bg-white p-4 rounded-lg lg:flex justify-between lg:px-10 cursor-pointer"
               >
-                {shortUrl}
-              </a>
-
-              <button
-                onClick={handleCopy}
-                className={`${
-                  copy ? "bg-[var(--Blue400)] " : "bg-[var(--Purple950)]"
-                } w-full p-3 lg:p-3 px-5 rounded-lg text-white font-semibold lg:w-[120px] cursor-pointer focus:bg-[var(--Purple950)]`}
-              >
-                {copy }
-              </button>
-            </div>
+                <span className="text-black text-[20px] lg:text-[24px]">
+                  {link.original}
+                </span>
+                <div className="lg:flex justify-between gap-5 items-center">
+                  <a
+                    href={link.shortened}
+                    className="text-[var(--Blue400)] text-[20px] lg:text-[18px] underline break-all "
+                    target="_blank"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {link.shortened}
+                  </a>
+                  <button
+                    onClick={(e) => handleCopy(link.shortened, index, e)}
+                    className={`w-full p-3 lg:p-3 px-5 rounded-lg font-semibold lg:w-[120px] cursor-pointer focus:bg-[var(--Purple950)] ${
+                      copy[index]
+                        ? "bg-[var(--Blue400)]"
+                        : "bg-[var(--Blue400)]"
+                    }`}
+                  >
+                    {copy[index] ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
