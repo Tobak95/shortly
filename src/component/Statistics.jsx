@@ -13,10 +13,12 @@ const Statistics = () => {
   const [copy, setCopy] = useState({});
 
   const isValidUrl = (urlString) => {
-    const pattern = new RegExp(
-      "^(https?:\\/\\/)?([\\w.-]+)\\.([a-z]{2,6})([\\/\\w .-]*)*\\/?$"
-    );
-    return pattern.test(urlString);
+    try {
+      new URL(urlString);
+      return true;
+    } catch {
+      return false;
+    }
   };
 
   const isEmpty = inputValue.trim() === "";
@@ -78,8 +80,8 @@ const Statistics = () => {
 
   return (
     <div className="bg-[var(--Gray400)]">
-      <div className="layout p-3 mt-20 py-30 ">
-        <div>
+      <div className="layout p-3  mt-20 py-30 ">
+        <div className="px-3">
           <form onSubmit={handleSubmit}>
             <div>
               <div className="-mt-50  lg:flex lg:flex-row items-center justify-between gap-5 bg-[var(--Purple950)] background rounded-2xl p-7 lg:p-15 text-black">
@@ -98,7 +100,7 @@ const Statistics = () => {
 
                 <button
                   type="submit"
-                  className="w-full lg:w-[20%] bg-[var(--Blue400)] p-4 text-[16px]  lg:p-4 mt-10 lg:mt-0  text-white font-semibold cursor-pointer lg:rounded-lg"
+                  className="w-full lg:w-[20%] bg-[var(--Blue400)] p-4 text-[16px]  lg:p-4 mt-10 lg:mt-0  text-white font-semibold cursor-pointer lg:rounded-lg hover:bg-[var(--Blue200)]"
                 >
                   Shorten it!
                 </button>
@@ -113,11 +115,11 @@ const Statistics = () => {
           </form>
         </div>
         {shortUrls && (
-          <div className="mt-30 lg:mt-15 space-y-4">
+          <div className="mt-30 px-3 lg:mt-15 space-y-4">
             {shortUrls.map((link, index) => (
               <div
                 key={index}
-                className="text-center bg-white p-4 rounded-lg lg:flex justify-between lg:px-10 cursor-pointer"
+                className="text-center  bg-white p-4 rounded-lg lg:flex justify-between lg:px-10 cursor-pointer"
               >
                 <span className="text-black text-[20px] lg:text-[24px]">
                   {link.original}
@@ -133,7 +135,7 @@ const Statistics = () => {
                   </a>
                   <button
                     onClick={(e) => handleCopy(link.shortened, index, e)}
-                    className={`w-full p-3 lg:p-3 px-5 rounded-lg font-semibold lg:w-[120px] cursor-pointer focus:bg-[var(--Purple950)] ${
+                    className={`w-full p-3 lg:p-3 px-5 rounded-lg  hover:bg-[var(--Blue200)] font-semibold lg:w-[120px] cursor-pointer focus:bg-[var(--Purple950)] ${
                       copy[index]
                         ? "bg-[var(--Blue400)]"
                         : "bg-[var(--Blue400)]"

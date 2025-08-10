@@ -21,7 +21,7 @@ const Nav = () => {
                 <div
                   key={index}
                   to={link.routes}
-                  className=" text-[var(--Gray500)] hover:text-[var(--Gray400)] px-2 font-bold cursor-pointer "
+                  className=" text-[var(--Gray500)] hover:text-black px-2 font-bold cursor-pointer "
                 >
                   {link.title}
                 </div>
@@ -30,10 +30,12 @@ const Nav = () => {
           </div>
         </div>
 
-        <div className="hidden lg:flex items-center justify-between gap-5 font-bold">
-          <button className="text-[var(--Gray500)]">Login</button>
+        <div className="hidden lg:flex items-center justify-between gap-5 font-bold ">
+          <button className="text-[var(--Gray500)]  hover:text-black">
+            Login
+          </button>
 
-          <button className="bg-[var(--Blue400)] rounded-full px-5 py-1 text-white font-semibold">
+          <button className="bg-[var(--Blue400)] rounded-full px-5 py-1 text-white font-semibold cursor-pointer hover:bg-[var(--Blue200)]">
             Sign Up
           </button>
         </div>

@@ -9,14 +9,14 @@ const HeroSection = () => {
           <h1 className="text-center text-[40px] lg:text-start  lg:text-[68px] font-bold">
             More than just shorter links
           </h1>
-          <div className="">
-            <p className="text-center text-[20px] px-6 lg:px-0 mt-3 lg:text-start lg:text-[30px] ">
+          <div className="w-[380px] md:w-[500px] lg:w-[700px]">
+            <p className="text-center text-[20px] px-6 lg:px-0 mt-3 lg:text-start lg:text-[28px] ">
               Build your brand recognition and get detailed insights on how your
               links are performing
             </p>
           </div>
 
-          <button className="bg-[var(--Blue400)] p-3 w-[150px] rounded-3xl mt-5 text-white font-semibold mx-auto lg:mx-0 block">
+          <button className="bg-[var(--Blue400)] p-3 w-[150px] rounded-3xl mt-5 text-white font-semibold mx-auto lg:mx-0 block cursor-pointer hover:bg-[var(--Blue200)]">
             Get Started
           </button>
         </div>
