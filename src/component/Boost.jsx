@@ -1,6 +1,4 @@
-import React from 'react'
-
-
+import React from "react";
 
 const Boost = () => {
   return (
@@ -13,6 +11,6 @@ const Boost = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Boost
+export default Boost;

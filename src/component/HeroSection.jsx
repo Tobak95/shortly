@@ -4,9 +4,9 @@ import illustration from "../assets/illustration-working.svg";
 const HeroSection = () => {
   return (
     <div className="layout">
-      <div className="flex flex-col-reverse lg:flex-row mt-10 items-center py-15 ">
+      <div className="flex flex-col-reverse lg:flex-row mt-10 items-center py-15 px-4">
         <div className="mt-10 lg:w-[60%]">
-          <h1 className="text-center text-[40px] lg:text-start lg:text-[95px] font-bold">
+          <h1 className="text-center text-[40px] lg:text-start  lg:text-[68px] font-bold">
             More than just shorter links
           </h1>
           <div className="">

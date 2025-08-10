@@ -5,6 +5,7 @@ import iconDetailed from "../assets/icon-detailed-records.svg";
 import iconBrand from "../assets/icon-brand-recognition.svg";
 
 const url = "https://tinyurl.com/api-create.php?url=";
+
 const Statistics = () => {
   const [inputValue, setInputValue] = useState("");
   const [shortUrls, setShortUrls] = useState([]);
@@ -17,6 +18,8 @@ const Statistics = () => {
     );
     return pattern.test(urlString);
   };
+
+  const isEmpty = inputValue.trim() === "";
 
   // Function to handle form submission and fetch the shortened URL and the form validation
   const handleSubmit = async (e) => {
@@ -40,6 +43,7 @@ const Statistics = () => {
         localStorage.setItem("shortUrls", JSON.stringify(updated));
         return updated;
       });
+      setInputValue("");
     } catch (error) {
       setError("Error shortening link");
       console.error("Error fetching shortened link:", error);
@@ -78,11 +82,16 @@ const Statistics = () => {
         <div>
           <form onSubmit={handleSubmit}>
             <div>
-              <div className="-mt-50  lg:flex lg:flex-row items-center justify-between gap-5 bg-[var(--Purple950)] background rounded-2xl p-7 lg:p-15 text-red-400">
+              <div className="-mt-50  lg:flex lg:flex-row items-center justify-between gap-5 bg-[var(--Purple950)] background rounded-2xl p-7 lg:p-15 text-black">
                 <input
                   type="text"
                   placeholder="Shorten a link here..."
-                  className="bg-white p-5 w-full  lg:p-4  lg:w-[80%] rounded-lg"
+                  className={`bg-white p-5 w-full  lg:p-4  lg:w-[80%] rounded-lg
+                  ${
+                    isEmpty
+                      ? "placeholder:text-black"
+                      : "placeholder:text-red-500"
+                  }`}
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                 />
@@ -94,6 +103,7 @@ const Statistics = () => {
                   Shorten it!
                 </button>
               </div>
+
               {error && (
                 <p className="text-red-500 text-sm -mt-28 lg:-mt-12 px-10 lg:px-15 italic">
                   {error}
@@ -103,7 +113,7 @@ const Statistics = () => {
           </form>
         </div>
         {shortUrls && (
-          <div className="mt-30   lg:mt-15 space-y-4">
+          <div className="mt-30 lg:mt-15 space-y-4">
             {shortUrls.map((link, index) => (
               <div
                 key={index}
