@@ -13,7 +13,11 @@ const Statistics = () => {
   const [copy, setCopy] = useState({});
 
   const clearAllFields = () => {
-    setInputValue(""), setShortUrls([]);
+    setInputValue("");
+    setShortUrls([]);
+    setError("");
+    setCopy({});
+    localStorage.removeItem("shortUrls");
   };
 
   const isValidUrl = (urlString) => {
@@ -117,7 +121,7 @@ const Statistics = () => {
           </form>
         </div>
         {shortUrls && (
-          <div className="mt-30 px-3 lg:mt-15 space-y-4">
+          <div className="mt-20 px-3 lg:mt-15 space-y-4">
             {shortUrls.map((link, index) => (
               <div
                 key={index}
@@ -148,13 +152,18 @@ const Statistics = () => {
                 </div>
               </div>
             ))}
-            <div className="flex justify-center">
-              <div className="">
-                <button onClick={clearAllFields} className="p-4 bg-[var(--Blue400)] hover:bg-[var(--Blue200)] font-bold rounded-lg ">
-                  CLEAR ALL FIELDS
-                </button>
+            {shortUrls.length > 0 && (
+              <div className="flex justify-center">
+                <div className="">
+                  <button
+                    onClick={clearAllFields}
+                    className="p-4 bg-[var(--Blue400)] hover:bg-[var(--Blue200)] font-bold rounded-lg "
+                  >
+                    CLEAR ALL FIELDS
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 
