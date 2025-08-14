@@ -13,9 +13,13 @@ const Statistics = () => {
   const [copy, setCopy] = useState({});
 
   const isValidUrl = (urlString) => {
+    // Regex: optional http(s), optional www, must end with .com
+  const pattern = /^(https?:\/\/)?(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/\S*)?$/;
+
+
     try {
       new URL(urlString);
-      return true;
+      return pattern.test(urlString);
     } catch {
       return false;
     }
@@ -68,15 +72,6 @@ const Statistics = () => {
     const stored = localStorage.getItem("shortUrls");
     if (stored) setShortUrls(JSON.parse(stored));
   }, []);
-
-  // useEffect(() => {
-  //   if (shortUrl) localStorage.setItem("shortUrl", JSON.stringify(shortUrl));
-  // }, [shortUrl]);
-
-  // const HandleNewLink = (original, shortened) => {
-  //   const NewLink = { original, shortened };
-  //   setShortUrl((prev) => [...prev, NewLink]);
-  // };
 
   return (
     <div className="bg-[var(--Gray400)]">
