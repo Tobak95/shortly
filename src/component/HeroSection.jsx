@@ -16,7 +16,7 @@ const HeroSection = () => {
             </p>
           </div>
 
-          <button className="bg-[var(--Blue400)] p-3 w-[150px] rounded-3xl mt-5 text-white font-semibold mx-auto lg:mx-0 block cursor-pointer hover:bg-[var(--Blue200)]">
+          <button className="bg-[var(--Blue400)] p-3 w-[150px] rounded-3xl mt-5 text-white font-semibold mx-auto lg:mx-0 block cursor-pointer">
             Get Started
           </button>
         </div>

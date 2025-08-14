@@ -35,7 +35,7 @@ const Nav = () => {
             Login
           </button>
 
-          <button className="bg-[var(--Blue400)] rounded-full px-5 py-1 text-white font-semibold cursor-pointer hover:bg-[var(--Blue200)]">
+          <button className="bg-[var(--Blue400)] rounded-full px-5 py-1 text-white font-semibold cursor-pointer">
             Sign Up
           </button>
         </div>

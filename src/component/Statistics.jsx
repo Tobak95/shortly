@@ -14,8 +14,8 @@ const Statistics = () => {
 
   const isValidUrl = (urlString) => {
     // Regex: optional http(s), optional www, must end with .com
-  const pattern = /^(https?:\/\/)?(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/\S*)?$/;
-
+    const pattern =
+      /^(https?:\/\/)?(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/\S*)?$/;
 
     try {
       new URL(urlString);
@@ -35,6 +35,9 @@ const Statistics = () => {
       return;
     } else if (!isValidUrl(inputValue)) {
       setError("Please enter a valid URL");
+      return;
+    } else if (shortUrls.some((link) => link.original === inputValue)) {
+      setError("This URL has already been shortened.");
       return;
     } else {
       setError("");
