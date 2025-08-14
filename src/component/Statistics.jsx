@@ -12,6 +12,10 @@ const Statistics = () => {
   const [error, setError] = useState("");
   const [copy, setCopy] = useState({});
 
+  const clearAllFields = () => {
+    setInputValue(""), setShortUrls([]);
+  };
+
   const isValidUrl = (urlString) => {
     // Regex: optional http(s), optional www, must end with .com
     const pattern =
@@ -144,6 +148,13 @@ const Statistics = () => {
                 </div>
               </div>
             ))}
+            <div className="flex justify-center">
+              <div className="">
+                <button onClick={clearAllFields} className="p-4 bg-[var(--Blue400)] hover:bg-[var(--Blue200)] font-bold rounded-lg ">
+                  CLEAR ALL FIELDS
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
