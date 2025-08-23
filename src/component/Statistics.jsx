@@ -3,74 +3,60 @@ import { useState, useEffect } from "react";
 import iconFully from "../assets/icon-fully-customizable.svg";
 import iconDetailed from "../assets/icon-detailed-records.svg";
 import iconBrand from "../assets/icon-brand-recognition.svg";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { MoonLoader } from "react-spinners";
+import { linkSchema } from "../../utils/formValidator";
 
 const url = "https://tinyurl.com/api-create.php?url=";
 
 const Statistics = () => {
-  const [inputValue, setInputValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [shortUrls, setShortUrls] = useState([]);
   const [error, setError] = useState("");
   const [copy, setCopy] = useState({});
-
   const clearAllFields = () => {
-    setInputValue("");
     setShortUrls([]);
     setError("");
     setCopy({});
     localStorage.removeItem("shortUrls");
   };
 
-  const isValidUrl = (urlString) => {
-    // Regex: optional http(s), optional www, must end with .com
-    const pattern =
-      /^(https?:\/\/)?(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/\S*)?$/;
-
-    try {
-      new URL(urlString);
-      return pattern.test(urlString);
-    } catch {
-      return false;
-    }
-  };
-
-  const isEmpty = inputValue.trim() === "";
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(linkSchema),
+  });
 
   // Function to handle form submission and fetch the shortened URL and the form validation
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (inputValue === "") {
-      setError("Please add a link");
-      return;
-    } else if (!isValidUrl(inputValue)) {
-      setError("Please enter a valid URL");
-      return;
-    } else if (shortUrls.some((link) => link.original === inputValue)) {
-      setError("This URL has already been shortened.");
-      return;
-    } else {
-      setError("");
-    }
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${url}${encodeURIComponent(inputValue)}`);
+      const inputLink = data.webUrl.trim();
+      const response = await fetch(`${url}${encodeURIComponent(inputLink)}`);
       const result = await response.text();
-      const newLink = { original: inputValue, shortened: result };
+      const newLink = { original: inputLink, shortened: result };
+
       setShortUrls((prev) => {
         const updated = [newLink, ...prev];
         localStorage.setItem("shortUrls", JSON.stringify(updated));
         return updated;
       });
-      setInputValue("");
+      reset();
     } catch (error) {
-      setError("Error shortening link");
+      setError(error?.response?.data.message || "Error shortening link");
       console.error("Error fetching shortened link:", error);
     }
+    setIsSubmitting(false);
   };
 
   // Function to handle copying the short URL to (clipboard copy & paste)
 
   const handleCopy = (url, index, e) => {
-    e.preventDefault();
     navigator.clipboard.writeText(url).then(() => {
       setCopy((prev) => ({ ...prev, [index]: true }));
       setTimeout(() => {
@@ -88,33 +74,42 @@ const Statistics = () => {
     <div className="bg-[var(--Gray400)]">
       <div className="layout p-3  mt-20 py-30 ">
         <div className="px-3">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div className="-mt-50  lg:flex lg:flex-row items-center justify-between gap-5 bg-[var(--Purple950)] background rounded-2xl p-7 lg:p-15 text-black">
                 <input
                   type="text"
+                  id="webUrl"
+                  {...register("webUrl")}
                   placeholder="Shorten a link here..."
                   className={`bg-white p-5 w-full  lg:p-4  lg:w-[80%] rounded-lg
                   ${
-                    isEmpty
-                      ? "placeholder:text-black"
-                      : "placeholder:text-red-500"
+                    errors.webUrl
+                      ? "placeholder:text-red-500"
+                      : "placeholder:text-black"
                   }`}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
                 />
+                {/* {errors.webUrl && (
+                  <p className="text-red-500 text-sm mt-2 italic">
+                    {errors.webUrl.message}
+                  </p>
+                )} */}
 
                 <button
                   type="submit"
                   className="w-full lg:w-[20%] bg-[var(--Blue400)] p-4 text-[16px]  lg:p-4 mt-10 lg:mt-0  text-white font-semibold cursor-pointer lg:rounded-lg hover:bg-[var(--Blue200)]"
                 >
-                  Shorten it!
+                  {isSubmitting ? (
+                    <MoonLoader color="#faf9fb" size={20} />
+                  ) : (
+                    "Shorten it!"
+                  )}
                 </button>
               </div>
 
-              {error && (
+              {errors.webUrl && (
                 <p className="text-red-500 text-sm -mt-28 lg:-mt-12 px-10 lg:px-15 italic">
-                  {error}
+                  {errors.webUrl.message}
                 </p>
               )}
             </div>

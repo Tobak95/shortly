@@ -1,0 +1,37 @@
+ /^(https?:\/\/)?(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/\S*)?$/;
+
+
+   // else if (!isValidUrl(inputValue)) 
+    //   setError("Please enter a valid URL");
+    //   return;
+
+
+
+
+    const isValidUrl = (urlString) => {
+    // Regex: optional http(s), optional www, must end with .com
+    const pattern =
+      /^(https?:\/\/)?(www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/\S*)?$/;
+
+    try {
+      new URL(urlString);
+      return pattern.test(urlString);
+    } catch {
+      return false;
+    }
+  };
+
+
+
+   if (inputValue === "") {
+      setError("Please add a link");
+      return;
+    } else if (!isValidUrl(inputValue)) {
+      setError("Please enter a valid URL");
+      return;
+    } else if (shortUrls.some((link) => link.original === inputValue)) {
+      setError("This URL has already been shortened.");
+      return;
+    } else {
+      setError("");
+    }
